@@ -5,15 +5,13 @@ df = pd.read_csv('originalData.csv')
 pos = 0
  
 for i in range(len(df)):
-  try:
-    pattern = bool(re.search(r'\ -\ c\d',df.Title[i][-5:])) 
-    if not pattern:
-      pos = i
-    elif pattern:
-      df.Item[pos] += df.Item[i]
-      df = df[df.Title != df.Title[i]] 
-  except:
-    print i
-    continue
-df.to_csv('bibs.csv')
+  book = df.Title[i] #current book
+  pattern = bool(re.search(r'\ -\ c\d',book[-5:])) #duplicate pattern search for last five characters of book title 
+  if not pattern:
+    pos = i
+  elif pattern: 
+    df.Item[pos] += df.Item[i] #add item header to original book title
+    df = df[df.Title != book] #filter the df so that it doesnt contain the current book
+ 
+df.to_csv('bibs.csv') #upload df results to another csv file
 
